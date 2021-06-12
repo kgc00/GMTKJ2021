@@ -43,5 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841cc37d75a0e0a4ba1db10bf3958668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 11400000, guid: c4253e5402a4641488de5e9414b9be10, type: 2}
   _scoreText: {fileID: 0}
   _incrementFrequency: 1
+  _incrementAmount: 0

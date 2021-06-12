@@ -1,11 +1,12 @@
 using System.Globalization;
 using DG.Tweening;
+using Input;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
+    [SerializeField] private InputReader _inputReader;
     public static GameManager _instance;
     [SerializeField] TextMeshProUGUI _scoreText;
     private float _score;
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        _inputReader.EnableDeploying();
         _score = 0;
         _scoreText.color = Color.green;
         _recurringIncrementSequence = DOTween.Sequence()
