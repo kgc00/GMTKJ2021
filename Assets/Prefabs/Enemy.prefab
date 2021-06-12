@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 267261497064913437}
   - component: {fileID: 9030397554572560030}
-  - component: {fileID: 1718025661798858372}
+  - component: {fileID: -1485108419343992228}
   - component: {fileID: 8570184656577565400}
   - component: {fileID: 6321123997529911719}
   - component: {fileID: 2232246080428944696}
@@ -51,7 +51,7 @@ MonoBehaviour:
   _speed: 10
   _speedCap: 8
   _damage: 1
---- !u!114 &1718025661798858372
+--- !u!114 &-1485108419343992228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,9 +60,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 550122052129589741}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b2188f0f5ed40fa90aaaa4fc9c7cae7, type: 3}
+  m_Script: {fileID: 11500000, guid: b26567c6aba140fea865a4b5cf90d483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deathScoreAmount: 10
+  _damageScoreAmount: 5
   _healthConfig: {fileID: 11400000, guid: 1b672f5b06877ae438ce674fbcea1d55, type: 2}
 --- !u!212 &8570184656577565400
 SpriteRenderer:

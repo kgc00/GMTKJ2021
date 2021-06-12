@@ -7,10 +7,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager _instance;
-    [SerializeField] TextMeshPro _scoreText;
+    [SerializeField] TextMeshProUGUI _scoreText;
     private float _score;
-    [SerializeField] private float _incrementFrequency;
-    private Sequence _incrementSequence;
+    [SerializeField, Range(0,10)] private float _incrementFrequency;
+    [SerializeField, Range(0,10)] private int _incrementAmount;
+    private Sequence _recurringIncrementSequence;
+    private Sequence _incrementVisualsSequence;
 
     private void Awake()
     {
@@ -25,24 +27,37 @@ public class GameManager : MonoBehaviour
     }
 
     private void OnDisable() {
-        _incrementSequence?.Kill();
+        _recurringIncrementSequence?.Kill();
     }
 
     // Start is called before the first frame update
     void Start() {
         _score = 0;
         _scoreText.color = Color.green;
-        _incrementSequence = DOTween.Sequence().AppendInterval(_incrementFrequency).AppendCallback(() => _score += 1).SetLoops(-1).Play();
+        _recurringIncrementSequence = DOTween.Sequence()
+            .AppendInterval(_incrementFrequency)
+            .AppendCallback(() => IncrementScore(_incrementAmount, false))
+            .SetLoops(-1).Play();
+
+        _incrementVisualsSequence = DOTween.Sequence()
+            .Append(_scoreText.material.DOColor(Color.red, "_FaceColor", .05f))
+            .Append(_scoreText.transform.DOPunchScale(Vector3.one, .2f))
+            .Join(_scoreText.material.DOColor(Color.green, "_FaceColor", .1f))
+            .SetAutoKill(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        _scoreText.fontSize = Mathf.MoveTowards(_scoreText.fontSize, 5f, 0.075f);
         _scoreText.text = _score.ToString(CultureInfo.InvariantCulture);
     }
 
-    void ResetLevel()
+    public void IncrementScore(int addition, bool withSequence = true) {
+        if (withSequence) _incrementVisualsSequence.Restart();
+        _score += addition;
+    }
+
+    public void ResetLevel()
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
