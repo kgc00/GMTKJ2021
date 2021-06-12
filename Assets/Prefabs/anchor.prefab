@@ -131,10 +131,11 @@ MonoBehaviour:
   <_throwTarget>k__BackingField: {x: 0, y: 0, z: 0}
   <_deflectTarget>k__BackingField: {x: 0, y: 0, z: 0}
   _rigidbody: {fileID: 5471878067004091211}
-  _speed: 5
-  _accelFactor: 0.8
-  _maxAccelFactor: 1.4
+  _accelFactor: 1.2
+  _speed: 25
+  _maxAccelFactor: 2.8
   _damage: 1
+  _acceptanceThreshold: 0.5080000162124634
   deflectWithRelativeVelocity: 1
   _deflectForce: 7
   _relativeDeflectForce: 0.6
