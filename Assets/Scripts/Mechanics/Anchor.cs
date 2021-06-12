@@ -42,12 +42,15 @@ namespace Mechanics {
         }
 
         private void Update() {
+
             if (_state == AnchorState.Thrown) {
                 if (Vector3.Distance(transform.position, _throwTarget) > 0.1) return;
                 _state = AnchorState.Landed;
             }
 
             if (_state == AnchorState.Reeling) {
+                if (_reelTransform == null) return;
+
                 if (Vector3.Distance(transform.position, _reelTransform.position) > 0.1) return;
                 _state = AnchorState.Caught;
             }
@@ -67,6 +70,8 @@ namespace Mechanics {
             }
 
             if (_state == AnchorState.Reeling) {
+                if (_reelTransform == null) return;
+                
                 _accelFactor = Mathf.Min(_accelFactor + Time.fixedDeltaTime, _maxAccelFactor);
                 var destination = _reelTransform.position - transform.position;
                 _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed * _accelFactor);

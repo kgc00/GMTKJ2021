@@ -14,9 +14,9 @@ namespace Mechanics {
         private Vector2 _pointerPos;
 
         private void OnEnable() {
-            MessageBroker.Default.Receive<MoveActionPerformed>().Subscribe(input => HandleMove(input.Motion));
-            MessageBroker.Default.Receive<MoveActionCanceled>().Subscribe(input => HandleMove(Vector2.zero));
-            MessageBroker.Default.Receive<PointAction>().Subscribe(input => HandlePoint(input.PointPos));
+            MessageBroker.Default.Receive<MoveActionPerformed>().Subscribe(input => HandleMove(input.Motion)).AddTo(this);
+            MessageBroker.Default.Receive<MoveActionCanceled>().Subscribe(input => HandleMove(Vector2.zero)).AddTo(this);
+            MessageBroker.Default.Receive<PointAction>().Subscribe(input => HandlePoint(input.PointPos)).AddTo(this);
         }
 
         private void HandlePoint(Vector2 inputPointPos) {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mechanics.Health;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour {
@@ -8,19 +9,29 @@ public class EnemyAI : MonoBehaviour {
     [SerializeField, Range(0, 10)] private float _speedCap;
 
     Rigidbody2D _rigidbody2D;
+    private AIState _state;
+    [SerializeField, Range(0, 10)] private float _damage;
+
+    enum AIState {
+        Chasing,
+        Knockback,
+    }
 
     // Start is called before the first frame update
     void Start() {
         _player = GameObject.FindGameObjectWithTag("Player");
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _state = AIState.Chasing;
     }
 
     private void Update() {
+        if (_player == null) return;
         RotateTowards(_player.transform.position);
     }
 
     // Update is called once per frame
     void FixedUpdate() {
+        if (_player == null) return;
         var normalizedTarget = (_player.transform.position - transform.position).normalized;
         _rigidbody2D.AddForce(normalizedTarget * _speed * Time.fixedDeltaTime, ForceMode2D.Impulse);
         _rigidbody2D.velocity = Vector2.ClampMagnitude(_rigidbody2D.velocity, _speedCap);
@@ -34,9 +45,18 @@ public class EnemyAI : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag("Player")) {
-            GameManager._instance.DamagePlayer();
-            Destroy(gameObject);
+        HandlePlayerCollision(collision);
+    }
+
+    private void HandlePlayerCollision(Collision2D collision) {
+        if (!collision.gameObject.CompareTag("Player")) return;
+        
+        if (collision.gameObject.TryGetComponent(out IDamagable damagable)) {
+            if (damagable as Object == null) return;
+
+            damagable.HealthSystem.Damage(_damage, this);
         }
+
+        Destroy(gameObject);
     }
 }

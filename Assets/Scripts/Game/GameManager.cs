@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Globalization;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager _instance;
-
-    [SerializeField] float _startingHealth = 100f;
-    [SerializeField] float _damagePerHit = 10f;
     [SerializeField] TextMeshPro _scoreText;
-    
-    float _playerHealth;
+    private float _score;
+    [SerializeField] private float _incrementFrequency;
+    private Sequence _incrementSequence;
 
     private void Awake()
     {
@@ -27,29 +24,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnDisable() {
+        _incrementSequence?.Kill();
+    }
+
     // Start is called before the first frame update
-    void Start()
-    {
-        _playerHealth = _startingHealth;
+    void Start() {
+        _score = 0;
+        _scoreText.color = Color.green;
+        _incrementSequence = DOTween.Sequence().AppendInterval(_incrementFrequency).AppendCallback(() => _score += 1).SetLoops(-1).Play();
     }
 
     // Update is called once per frame
     void Update()
     {
         _scoreText.fontSize = Mathf.MoveTowards(_scoreText.fontSize, 5f, 0.075f);
-        _scoreText.color = Color.Lerp(Color.red, Color.green, _playerHealth / _startingHealth);
-        _scoreText.text = _playerHealth.ToString();
-    }
-
-    public void DamagePlayer()
-    {
-        _scoreText.fontSize = 15f;
-        _playerHealth -= _damagePerHit;
-        
-        if(_playerHealth <= 0)
-        {
-            ResetLevel();
-        }
+        _scoreText.text = _score.ToString(CultureInfo.InvariantCulture);
     }
 
     void ResetLevel()

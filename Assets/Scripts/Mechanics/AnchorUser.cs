@@ -1,6 +1,7 @@
 ﻿using Input;
 using Messages;
 using UniRx;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using Utils;
 
@@ -15,10 +16,10 @@ namespace Mechanics {
         private bool _catching;
 
         private void OnEnable() {
-            MessageBroker.Default.Receive<DeployAction>().Subscribe(_ => HandleDeploy());
-            MessageBroker.Default.Receive<ReelAction>().Subscribe(_ => HandleReel());
-            MessageBroker.Default.Receive<ReelCanceledAction>().Subscribe(_ => HandleReelCanceled());
-            MessageBroker.Default.Receive<PointAction>().Subscribe(input => HandlePoint(input.PointPos));
+            MessageBroker.Default.Receive<DeployAction>().Subscribe(_ => HandleDeploy()).AddTo(this);
+            MessageBroker.Default.Receive<ReelAction>().Subscribe(_ => HandleReel()).AddTo(this);
+            MessageBroker.Default.Receive<ReelCanceledAction>().Subscribe(_ => HandleReelCanceled()).AddTo(this);
+            MessageBroker.Default.Receive<PointAction>().Subscribe(input => HandlePoint(input.PointPos)).AddTo(this);
         }
 
         private void HandlePoint(Vector2 inputPointPos) {
