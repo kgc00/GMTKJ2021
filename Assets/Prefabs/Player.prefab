@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145b2c7ce6dd43aca12ea001115764d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _movement: {fileID: 8717390381700487714}
   _anchorPrefab: {fileID: 3083296063087260722, guid: 96a9b2db4b6c05d4da5cebcce7e68757, type: 3}
   _inputReader: {fileID: 11400000, guid: c4253e5402a4641488de5e9414b9be10, type: 2}
 --- !u!50 &8717390381700487713

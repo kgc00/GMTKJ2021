@@ -49,6 +49,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""99eadfe7-6695-425a-a559-31edde102028"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -313,6 +321,39 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39079d9a-8c74-4a14-8409-64e77b7aba5c"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f16c6a7-c9bf-4ada-9acc-31c3118c3ec6"",
+                    ""path"": ""<Pen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71ca2bcc-33dc-4e63-81e1-5f4d43dccd6f"",
+                    ""path"": ""<Touchscreen>/touch*/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -894,6 +935,7 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Gameplay_Deploy = m_Gameplay.FindAction("Deploy", throwIfNotFound: true);
         m_Gameplay_Reel = m_Gameplay.FindAction("Reel", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+        m_Gameplay_Point = m_Gameplay.FindAction("Point", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -959,6 +1001,7 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Deploy;
     private readonly InputAction m_Gameplay_Reel;
     private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_Point;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -967,6 +1010,7 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @Deploy => m_Wrapper.m_Gameplay_Deploy;
         public InputAction @Reel => m_Wrapper.m_Gameplay_Reel;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+        public InputAction @Point => m_Wrapper.m_Gameplay_Point;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -988,6 +1032,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
+                @Point.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
+                @Point.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
+                @Point.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPoint;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -1004,6 +1051,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Point.started += instance.OnPoint;
+                @Point.performed += instance.OnPoint;
+                @Point.canceled += instance.OnPoint;
             }
         }
     }
@@ -1164,6 +1214,7 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnDeploy(InputAction.CallbackContext context);
         void OnReel(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

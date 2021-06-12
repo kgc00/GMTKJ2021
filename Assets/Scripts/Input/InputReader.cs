@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Messages;
 using UniRx;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Input {
             controls ??= new Controls();
             controls.Gameplay.SetCallbacks(this);
             controls.Gameplay.Enable();
+            EnableDeploying();
         }
 
         public void OnMove(InputAction.CallbackContext context) {
@@ -20,17 +22,24 @@ namespace Input {
             if (context.canceled) MessageBroker.Default.Publish(new MoveActionCanceled());
         }
 
-        public void OnDeploy(InputAction.CallbackContext context) { 
-            if(context.performed) MessageBroker.Default.Publish(new DeployAction());
+        public void OnDeploy(InputAction.CallbackContext context) {
+            if (context.performed) MessageBroker.Default.Publish(new DeployAction());
         }
 
         public void OnReel(InputAction.CallbackContext context) {
-            if(context.canceled) MessageBroker.Default.Publish(new ReelCanceledAction());
-            if(context.performed) MessageBroker.Default.Publish(new ReelAction());
+            if (context.canceled) MessageBroker.Default.Publish(new ReelCanceledAction());
+            if (context.performed) MessageBroker.Default.Publish(new ReelAction());
         }
 
         public void OnDash(InputAction.CallbackContext context) {
             if (context.performed) MessageBroker.Default.Publish(new DashAction());
+        }
+
+        public void OnPoint(InputAction.CallbackContext context) {
+            if (!context.performed) return;
+            
+            var val = context.ReadValue<Vector2>();
+            MessageBroker.Default.Publish(new PointAction(val));
         }
 
         public void EnableReeling() {
