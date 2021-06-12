@@ -133,6 +133,10 @@ MonoBehaviour:
   _rigidbody: {fileID: 5471878067004091211}
   _speed: 5
   _deflectForce: 7
+  _relativeDeflectForce: 0.6
+  _accelFactor: 0.8
+  _maxAccelFactor: 1.4
+  deflectWithRelativeVelocity: 1
 --- !u!61 &1639411136062692159
 BoxCollider2D:
   m_ObjectHideFlags: 0

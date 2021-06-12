@@ -10,7 +10,14 @@ namespace Mechanics {
         [SerializeField] private float _speed;
         private AnchorState _state = AnchorState.Idle;
         private Transform _reelTransform;
-        [SerializeField, Range(0, 10)]private float _deflectForce = 7;
+        [Header("Common")]
+        [SerializeField, Range(0, 3)]private float _accelFactor = 1;
+        [SerializeField, Range(1, 3)]private float _maxAccelFactor = 2;
+        [SerializeField] private bool deflectWithRelativeVelocity;
+        [SerializeField, Range(0, 10), Header("Used when deflectWithRelativeVelocity is true")]private float _deflectForce = 0.8f;
+        [SerializeField, Range(0, 10), Header("Used when deflectWithRelativeVelocity is false")]private float _relativeDeflectForce = 7;
+        private float _baseAccelFactor;
+        Vector3 deflectTarget = Vector3.zero;
 
         enum AnchorState {
             Idle,
@@ -21,6 +28,9 @@ namespace Mechanics {
             Deflected,
         }
 
+        private void Start() {
+            _baseAccelFactor = _accelFactor;
+        }
 
         private void Update() {
             if (_state == AnchorState.Thrown) {
@@ -48,8 +58,9 @@ namespace Mechanics {
             }
 
             if (_state == AnchorState.Reeling) {
+                _accelFactor = Mathf.Min(_accelFactor + Time.fixedDeltaTime, _maxAccelFactor);
                 var destination = _reelTransform.position - transform.position;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed);
+                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed *_accelFactor);
             }
             if (_state == AnchorState.Deflected) {
                 var destination = deflectTarget - transform.position;
@@ -66,16 +77,19 @@ namespace Mechanics {
             _reelTransform = anchorUserTransform;
             _state = AnchorState.Reeling;
         }
-        Vector3 deflectTarget = Vector3.zero;
+
         public void Deflect(Collision2D collision2D) {
             _state = AnchorState.Deflected;
-            deflectTarget = collision2D.gameObject.transform.position + (collision2D.contacts[0].normal * _deflectForce).ToVector3();
+            var baseDeflectPos = (collision2D.contacts[0].normal * _deflectForce).ToVector3();
+            var relativeForceDeflectPos = collision2D.relativeVelocity.magnitude *  (collision2D.contacts[0].normal * _relativeDeflectForce).ToVector3();
+            var deflectPos = deflectWithRelativeVelocity ? relativeForceDeflectPos : baseDeflectPos;
+            deflectTarget = collision2D.gameObject.transform.position + deflectPos;
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {
             if (_state == AnchorState.Reeling) {
                 if (!collision.gameObject.TryGetComponent(out AnchorUser anchorUser)) return;
-
+                _accelFactor = _baseAccelFactor;
                 anchorUser.Catch(this, collision);
             }
         }
