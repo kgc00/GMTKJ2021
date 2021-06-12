@@ -1,4 +1,6 @@
 ﻿using Mechanics.Health;
+using Messages;
+using UniRx;
 using UnityEngine;
 
 namespace Game {
@@ -6,7 +8,11 @@ namespace Game {
         [SerializeField] private HealthConfigSO _healthConfig;
         public HealthSystem HealthSystem { get; private set; }
         public GameObject Behaviour => gameObject;
-        public void OnHealthChanged(float prevAmount) { }
+
+        public void OnHealthChanged(float prevAmount) {
+            MessageBroker.Default.Publish(
+                new PlayerHealthChanged(new HealthAdjustment(prevAmount, HealthSystem.CurrentHp, HealthSystem.MaxHp)));
+        }
 
         public void OnDeath() {
             Destroy(gameObject);
