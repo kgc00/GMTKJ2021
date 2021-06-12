@@ -20,10 +20,27 @@ namespace Input {
             if (context.canceled) MessageBroker.Default.Publish(new MoveActionCanceled());
         }
 
-        public void OnFire(InputAction.CallbackContext context) {
-            if(!context.performed) return;
-            
-            MessageBroker.Default.Publish(new FireAction());
+        public void OnDeploy(InputAction.CallbackContext context) { 
+            if(context.performed) MessageBroker.Default.Publish(new DeployAction());
+        }
+
+        public void OnReel(InputAction.CallbackContext context) {
+            if(context.canceled) MessageBroker.Default.Publish(new ReelCanceledAction());
+            if(context.performed) MessageBroker.Default.Publish(new ReelAction());
+        }
+
+        public void OnDash(InputAction.CallbackContext context) {
+            if (context.performed) MessageBroker.Default.Publish(new DashAction());
+        }
+
+        public void EnableReeling() {
+            controls.Gameplay.Deploy.Disable();
+            controls.Gameplay.Reel.Enable();
+        }
+
+        public void EnableDeploying() {
+            controls.Gameplay.Reel.Disable();
+            controls.Gameplay.Deploy.Enable();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Units {
         [SerializeField, Range(1,20)] private float _speed = 5f;
 
         private void OnEnable() {
-            MessageBroker.Default.Receive<FireAction>().Subscribe(_ => HandleFire());
             MessageBroker.Default.Receive<MoveActionPerformed>().Subscribe(input => HandleMove(input.Motion));
             MessageBroker.Default.Receive<MoveActionCanceled>().Subscribe(input => HandleMove(Vector2.zero));
         }
