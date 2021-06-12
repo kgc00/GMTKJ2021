@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _spawningSurface;
-    [SerializeField] private GameObject _toSpawn;
-    [SerializeField] private float _spawnTime;
+    [SerializeField] GameObject _spawningSurface;
+    [SerializeField] GameObject _toSpawn;
+    [SerializeField] float _spawnTime;
 
     private Bounds _spawningBounds;
 
@@ -35,8 +35,9 @@ public class Spawner : MonoBehaviour
                 float clampedY = random.y > 0 ? _spawningBounds.center.y + _spawningBounds.extents.y : _spawningBounds.center.y - _spawningBounds.extents.y;
                 spawningBounds = new Vector2(_spawningBounds.center.x + random.x * _spawningBounds.extents.x, clampedY);
             }
-
             clampX = !clampX;
+
+            GameObject newSpawn = Instantiate(_toSpawn, spawningBounds, Quaternion.identity);
 
             yield return new WaitForSeconds(_spawnTime);
         }
