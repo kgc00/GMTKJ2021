@@ -34,11 +34,8 @@ namespace Mechanics {
 
         private void UpdateRotation() {
             var mousePos = GameUtils.MousePosToWorldPosition(_pointerPos);
-            // lock y to unit's current y
-            // var lookTarget = new Vector3(mousePos.x, mousePos.y, transform.position.y);
-            var dif = mousePos - transform.position;
-            
-            float angle = Mathf.Atan2(dif.y,dif.x) * Mathf.Rad2Deg;
+            var lookTarget = mousePos - transform.position;
+            float angle = Mathf.Atan2(lookTarget.y,lookTarget.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
