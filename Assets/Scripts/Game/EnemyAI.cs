@@ -34,4 +34,13 @@ public class EnemyAI : MonoBehaviour
         var offset = 0f;
         transform.rotation = Quaternion.Euler(Vector3.forward * (angle + offset));
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            GameManager._instance.DamagePlayer();
+            Destroy(gameObject);
+        }
+    }
 }
