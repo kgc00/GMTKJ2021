@@ -21,8 +21,6 @@ namespace Units {
             _motion = inputMotion;
         }
 
-
-
         private void HandleFire() { }
 
         private void FixedUpdate() {
