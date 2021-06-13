@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
     private float _score;
     [SerializeField, Range(0,10)] private float _incrementFrequency;
     [SerializeField, Range(0,10)] private int _incrementAmount;
+    [SerializeField] private Color _scoreTextBaseColor;
+    [SerializeField] private Color _scoreTextKillColor;
     private Sequence _recurringIncrementSequence;
     private Sequence _incrementVisualsSequence;
     private Sequence _decreaseInstructionsOpacitySequence;
@@ -43,9 +45,9 @@ public class GameManager : MonoBehaviour {
             .SetLoops(-1).Play();
 
         _incrementVisualsSequence = DOTween.Sequence()
-            .Append(_scoreText.materialForRendering.DOColor(Color.red, "_FaceColor", .1f))
+            .Append(_scoreText.materialForRendering.DOColor(_scoreTextKillColor, "_FaceColor", .1f))
             .Append(_scoreText.transform.DOPunchScale(Vector3.one, .2f))
-            .Join(_scoreText.materialForRendering.DOColor(Color.green, "_FaceColor", .2f))
+            .Join(_scoreText.materialForRendering.DOColor(_scoreTextBaseColor, "_FaceColor", .2f))
             .SetAutoKill(false);
 
         DOTween.ToAlpha(() => _instructionText.color, x => _instructionText.color = x, 0, 5).SetDelay(15);
