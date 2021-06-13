@@ -8,6 +8,7 @@ using Utils;
 namespace Mechanics {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Movement : MonoBehaviour {
+        [SerializeField] private Animator _animator;
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private Rigidbody2D _rigidbody;
         public Vector2 Motion { get; private set; }
@@ -39,8 +40,7 @@ namespace Mechanics {
 
         private void OnGUI()
         {
-            GUILayout.Box(_aDASHionableSpeed.ToString());
-            GUILayout.Box(_state.ToString());
+            GUILayout.Box(_rigidbody.velocity.magnitude.ToString());
         }
 
         private void HandlePoint(Vector2 inputPointPos) {
@@ -79,6 +79,7 @@ namespace Mechanics {
         private void FixedUpdate() {
             _rigidbody.velocity = Motion.normalized * Time.fixedDeltaTime * (_speed + _aDASHionableSpeed);
             _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed + _aDASHionableSpeed);
+            _animator.SetFloat("Velocity", _rigidbody.velocity.sqrMagnitude);
         }
 
         void SwitchState(MovementState newState) {
