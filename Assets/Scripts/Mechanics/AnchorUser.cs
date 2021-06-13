@@ -53,7 +53,7 @@ namespace Mechanics {
             var spawnRot = Quaternion.AngleAxis(angle, Vector3.forward);
             _anchorObj = Instantiate(_anchorPrefab, spawnPos, spawnRot).GetComponent<Anchor>();
             _anchorObj.Throw(throwPos);
-            _catching = true;
+            _catching = false;
             _inputReader.EnableReeling();
         }
     }

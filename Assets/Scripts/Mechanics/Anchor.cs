@@ -11,15 +11,19 @@ namespace Mechanics {
         [SerializeField] private Rigidbody2D _rigidbody;
         
         private AnchorState _state = AnchorState.Idle;
+        
         private Transform _reelTransform;
 
-        [Header("Common")] [SerializeField, Range(0, 3)]
-        private float _accelFactor = 1;
-
+        [Header("Common")] 
+        
+        [SerializeField, Range(0, 10)] private float _accelFactor = 1;
+        [SerializeField, Range(1, 10)] private float _maxAccelFactor = 2;
+        [SerializeField,Range(10,50f)]private float _maxSpeed;
+        [SerializeField, Range(0.1f, .99f)] private float _destinationDampFactor;
         [SerializeField, Range(5f, 50f)] private float _speed;
-        [SerializeField, Range(1, 3)] private float _maxAccelFactor = 2;
         [SerializeField, Range(1, 10)] private float _damage;
-        [SerializeField, Range(0.01f, 1f)] private double _acceptanceThreshold = 0.1;
+        [SerializeField, Range(0.01f, 2f)] private double _acceptanceThreshold = 0.1;
+        [SerializeField, Range(0,2f)]private float _deflectSpeed;
         [SerializeField] private bool deflectWithRelativeVelocity;
 
         [SerializeField, Range(0, 10), Header("Used when deflectWithRelativeVelocity is true")]
@@ -29,9 +33,8 @@ namespace Mechanics {
         private float _relativeDeflectForce = 7;
 
         private float _baseAccelFactor;
-        Vector3 deflectTarget = Vector3.zero;
-
-        private Vector3 _previousVelocity;
+        private Vector2 _previousVelocity;
+        private Vector2 _lastPos;
 
         enum AnchorState {
             Idle,
@@ -49,7 +52,9 @@ namespace Mechanics {
         private void OnGUI()
         {
             GUILayout.Box(_state.ToString());
-            GUILayout.Box(_previousVelocity.magnitude.ToString());
+            GUILayout.Box(_deflectTarget.ToString());
+            GUILayout.Box(transform.position.ToString());
+            GUILayout.Box(Vector3.Distance(transform.position, _deflectTarget).ToString());
         }
 
         private void Update() {
@@ -68,7 +73,8 @@ namespace Mechanics {
             if (_state == AnchorState.Caught) { }
 
             if (_state == AnchorState.Deflected) {
-                if (Vector3.Distance(transform.position, _deflectTarget) > _acceptanceThreshold) return;
+                if (Vector3.Distance(transform.position, _deflectTarget) > _acceptanceThreshold * 2) return;
+                _accelFactor = _baseAccelFactor;
                 _state = AnchorState.Landed;
             }
         }
@@ -76,9 +82,8 @@ namespace Mechanics {
         private void FixedUpdate() {
             if (_state == AnchorState.Thrown) {
                 var destination = (_throwTarget - transform.position).normalized;
-                Vector3 thrownVelocity = transform.position + destination * Time.fixedDeltaTime * _speed;
-                _rigidbody.MovePosition(thrownVelocity);
-                _previousVelocity = thrownVelocity;
+                _rigidbody.velocity += (Vector2)destination * _speed;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Reeling) {
@@ -86,17 +91,18 @@ namespace Mechanics {
                 
                 _accelFactor = Mathf.Min(_accelFactor + Time.fixedDeltaTime, _maxAccelFactor);
                 var destination = (_reelTransform.position - transform.position).normalized;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed * _accelFactor);
+                _rigidbody.velocity += (Vector2)destination * _speed * _accelFactor * Time.fixedDeltaTime;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Deflected) {
-                var destination = (deflectTarget - transform.position).normalized;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed);
+                var destination = (_deflectTarget - transform.position).normalized;
+                _rigidbody.velocity += (Vector2)destination * _speed * _deflectSpeed;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Landed) {
-                var destination = _previousVelocity;
-                _rigidbody.MovePosition(transform.position + (_previousVelocity * 0.25f));
+                _rigidbody.velocity *= _destinationDampFactor;
             }
         }
 
@@ -111,12 +117,13 @@ namespace Mechanics {
         }
 
         public void Deflect(Collision2D collision2D) {
+            if(_state == AnchorState.Thrown) return;
             _state = AnchorState.Deflected;
             var baseDeflectPos = (collision2D.contacts[0].normal * _deflectForce).ToVector3();
             var relativeForceDeflectPos = collision2D.relativeVelocity.magnitude *
                                           (collision2D.contacts[0].normal * _relativeDeflectForce).ToVector3();
             var deflectPos = deflectWithRelativeVelocity ? relativeForceDeflectPos : baseDeflectPos;
-            deflectTarget = collision2D.gameObject.transform.position + deflectPos;
+            _deflectTarget = (Vector2)(collision2D.gameObject.transform.position + deflectPos);
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {
@@ -151,9 +158,9 @@ namespace Mechanics {
             }
         }
 
-        // private void OnDrawGizmos() {
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawSphere(deflectTarget, 1);
-        // }
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_deflectTarget, (float)_acceptanceThreshold*2f);
+        }
     }
 }

@@ -131,14 +131,17 @@ MonoBehaviour:
   <_throwTarget>k__BackingField: {x: 0, y: 0, z: 0}
   <_deflectTarget>k__BackingField: {x: 0, y: 0, z: 0}
   _rigidbody: {fileID: 5471878067004091211}
-  _accelFactor: 1.2
+  _accelFactor: 9
+  _maxAccelFactor: 6
+  _maxSpeed: 20
+  _destinationDampFactor: 0.8
   _speed: 25
-  _maxAccelFactor: 2.8
   _damage: 1
-  _acceptanceThreshold: 0.5080000162124634
+  _acceptanceThreshold: 1
+  _deflectSpeed: 1
   deflectWithRelativeVelocity: 1
   _deflectForce: 7
-  _relativeDeflectForce: 0.6
+  _relativeDeflectForce: 0.4
 --- !u!61 &1639411136062692159
 BoxCollider2D:
   m_ObjectHideFlags: 0
