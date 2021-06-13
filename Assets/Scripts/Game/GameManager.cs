@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private InputReader _inputReader;
     public static GameManager _instance;
     [SerializeField] TextMeshProUGUI _scoreText;
+    [SerializeField] TextMeshProUGUI _instructionText;
     private float _score;
     [SerializeField, Range(0,10)] private float _incrementFrequency;
     [SerializeField, Range(0,10)] private int _incrementAmount;
     private Sequence _recurringIncrementSequence;
     private Sequence _incrementVisualsSequence;
+    private Sequence _decreaseInstructionsOpacitySequence;
 
     private void Awake()
     {
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviour {
             .Append(_scoreText.transform.DOPunchScale(Vector3.one, .2f))
             .Join(_scoreText.materialForRendering.DOColor(Color.green, "_FaceColor", .2f))
             .SetAutoKill(false);
+
+        DOTween.ToAlpha(() => _instructionText.color, x => _instructionText.color = x, 0, 5).SetDelay(15);
     }
 
     // Update is called once per frame
