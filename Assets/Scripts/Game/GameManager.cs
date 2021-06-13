@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour {
     void Start() {
         _inputReader.EnableDeploying();
         _score = 0;
-        // _scoreText.color = Color.green;
         _recurringIncrementSequence = DOTween.Sequence()
             .AppendInterval(_incrementFrequency)
             .AppendCallback(() => IncrementScore(_incrementAmount, false))

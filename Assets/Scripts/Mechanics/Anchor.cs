@@ -21,7 +21,7 @@ namespace Mechanics {
         [SerializeField, Range(10, 50f)] private float _maxSpeed;
         [SerializeField, Range(0.1f, .99f)] private float _destinationDampFactor;
         [SerializeField, Range(5f, 50f)] private float _speed;
-        [SerializeField, Range(1, 10)] private float _damage;
+        [SerializeField, Range(1, 10)] private int _damage;
         [SerializeField, Range(0.01f, 2f)] private double _acceptanceThreshold = 0.1;
         [SerializeField, Range(0, 2f)] private float _deflectSpeed;
         [SerializeField] private bool deflectWithRelativeVelocity;
@@ -147,8 +147,8 @@ namespace Mechanics {
                 damagable.HealthSystem.Damage(_damage, this);
             }
 
-            collision.gameObject.AddComponent<KnockbackDebuff>().Initialize(collision.contacts[0].normal,
-                collision.relativeVelocity.sqrMagnitude, _knockbackDuration);
+            collision.gameObject.AddComponent<KnockbackDebuff>().Initialize(new KnockbackData(collision.contacts[0].normal,
+                collision.relativeVelocity.sqrMagnitude, _knockbackDuration, _damage));
         }
 
         private void OnDrawGizmos() {
