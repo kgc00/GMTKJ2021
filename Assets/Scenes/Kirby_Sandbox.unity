@@ -832,6 +832,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7280976436204887330, guid: 37e59f4e68671d945aff84481cd3b466, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7280976436204887331, guid: 37e59f4e68671d945aff84481cd3b466, type: 3}
       propertyPath: _scoreText
       value: 
@@ -1000,7 +1004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 267261497064913437, guid: 77ebb862af444d445a6f29266422dc3a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 267261497064913437, guid: 77ebb862af444d445a6f29266422dc3a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1044,10 +1048,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 550122052129589741, guid: 77ebb862af444d445a6f29266422dc3a, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2232246080428944696, guid: 77ebb862af444d445a6f29266422dc3a, type: 3}
-      propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9030397554572560030, guid: 77ebb862af444d445a6f29266422dc3a, type: 3}

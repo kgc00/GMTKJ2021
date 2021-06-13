@@ -35,16 +35,16 @@ public class GameManager : MonoBehaviour {
     void Start() {
         _inputReader.EnableDeploying();
         _score = 0;
-        _scoreText.color = Color.green;
+        // _scoreText.color = Color.green;
         _recurringIncrementSequence = DOTween.Sequence()
             .AppendInterval(_incrementFrequency)
             .AppendCallback(() => IncrementScore(_incrementAmount, false))
             .SetLoops(-1).Play();
 
         _incrementVisualsSequence = DOTween.Sequence()
-            .Append(_scoreText.material.DOColor(Color.red, "_FaceColor", .05f))
+            .Append(_scoreText.materialForRendering.DOColor(Color.red, "_FaceColor", .1f))
             .Append(_scoreText.transform.DOPunchScale(Vector3.one, .2f))
-            .Join(_scoreText.material.DOColor(Color.green, "_FaceColor", .1f))
+            .Join(_scoreText.materialForRendering.DOColor(Color.green, "_FaceColor", .2f))
             .SetAutoKill(false);
     }
 
