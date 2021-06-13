@@ -11,19 +11,12 @@ public class EnemyAI : MonoBehaviour {
     [SerializeField, Range(0, 10)] private float _speedCap;
 
     Rigidbody2D _rigidbody2D;
-    private AIState _state;
     [SerializeField, Range(0, 10)] private float _damage;
-
-    enum AIState {
-        Chasing,
-        Knockback,
-    }
 
     // Start is called before the first frame update
     void Start() {
         _player = GameObject.FindGameObjectWithTag("Player");
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _state = AIState.Chasing;
     }
 
     private void Update() {
