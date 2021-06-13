@@ -140,6 +140,7 @@ MonoBehaviour:
   _acceptanceThreshold: 1
   _deflectSpeed: 1
   deflectWithRelativeVelocity: 1
+  _knockbackDuration: 1
   _deflectForce: 7
   _relativeDeflectForce: 0.4
 --- !u!61 &1639411136062692159
