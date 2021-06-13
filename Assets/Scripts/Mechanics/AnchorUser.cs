@@ -10,6 +10,10 @@ namespace Mechanics {
         [SerializeField] private Movement _movement;
         [SerializeField] private GameObject _anchorPrefab;
         [SerializeField] private InputReader _inputReader;
+        [SerializeField] private AudioClip _throwSFX;
+        [SerializeField] private AudioClip _reelSFX;
+        [SerializeField] private AudioClip _catchSFX;
+        [SerializeField] private AudioClip _deflectSFX;
         private Anchor _anchorObj;
         private Vector3 _mousePos;
         private bool _catching;
@@ -32,15 +36,18 @@ namespace Mechanics {
         private void HandleReel() {
             _catching = true;
             _anchorObj.Reel(transform);
+            MessageBroker.Default.Publish(new PlaySFXEvent(_reelSFX));
         }
 
         public void Catch(Anchor anchor, Collision2D collision2D) {
             if (_catching) {
                 Destroy(anchor.gameObject);
                 _inputReader.EnableDeploying();
+                MessageBroker.Default.Publish(new PlaySFXEvent(_catchSFX));
             }
             else {
                 anchor.Deflect(collision2D);
+                MessageBroker.Default.Publish(new PlaySFXEvent(_deflectSFX));
             }
         }
 
@@ -54,6 +61,7 @@ namespace Mechanics {
             _anchorObj.Throw(throwPos);
             _catching = false;
             _inputReader.EnableReeling();
+            MessageBroker.Default.Publish(new PlaySFXEvent(_throwSFX));
         }
     }
 }

@@ -45,5 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: c4253e5402a4641488de5e9414b9be10, type: 2}
   _scoreText: {fileID: 0}
+  _instructionText: {fileID: 0}
   _incrementFrequency: 1
   _incrementAmount: 0
+  _scoreTextBaseColor: {r: 0, g: 0, b: 0, a: 0}
+  _scoreTextKillColor: {r: 0, g: 0, b: 0, a: 0}
+  _incrementSound: {fileID: 8300000, guid: 70b0452fc790af64f9f28dbef94ace8b, type: 3}

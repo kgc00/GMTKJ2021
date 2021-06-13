@@ -265,6 +265,7 @@ MonoBehaviour:
   _maxSpeed: 15
   _dashDiminishRate: 5
   _dashSpeed: 1000
+  _dashSFX: {fileID: 8300000, guid: 52e565441324dcc40b3c2f3a2f696313, type: 3}
 --- !u!114 &2687264676369308234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +281,10 @@ MonoBehaviour:
   _movement: {fileID: 8717390381700487714}
   _anchorPrefab: {fileID: 3083296063087260722, guid: 96a9b2db4b6c05d4da5cebcce7e68757, type: 3}
   _inputReader: {fileID: 11400000, guid: c4253e5402a4641488de5e9414b9be10, type: 2}
+  _throwSFX: {fileID: 8300000, guid: cf15cfd6443025e4aa2f11b7e7abeb9b, type: 3}
+  _reelSFX: {fileID: 8300000, guid: cb3f9f4f81a92304ea03be667f12bdc1, type: 3}
+  _catchSFX: {fileID: 8300000, guid: bfc79dc65e8bdd845812c96d3f9105fa, type: 3}
+  _deflectSFX: {fileID: 8300000, guid: 7144c25dac6335647b3e71d4bc644e08, type: 3}
 --- !u!50 &8717390381700487713
 Rigidbody2D:
   serializedVersion: 4
@@ -340,3 +345,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthConfig: {fileID: 11400000, guid: 42694786487282544a85109f66dcb86d, type: 2}
+  _hurtSFX: {fileID: 8300000, guid: c1156be1b5a2a1d439decd0abde82f39, type: 3}
+  _deathSFX: {fileID: 8300000, guid: da91bb244d51dcb4eaef4008024cd27a, type: 3}

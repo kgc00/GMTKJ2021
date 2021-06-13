@@ -8,10 +8,13 @@ namespace Game {
         [SerializeField] private HealthConfigSO _healthConfig;
         public HealthSystem HealthSystem { get; private set; }
         public GameObject Behaviour => gameObject;
+        [SerializeField] private AudioClip _hurtSFX;
+        [SerializeField] private AudioClip _deathSFX;
 
         public void OnHealthChanged(float prevAmount) {
             MessageBroker.Default.Publish(
                 new PlayerHealthChanged(new HealthAdjustment(prevAmount, HealthSystem.CurrentHp, HealthSystem.MaxHp)));
+            MessageBroker.Default.Publish(new PlaySFXEvent(HealthSystem.IsDead ? _deathSFX : _hurtSFX));
         }
 
         public void OnDeath() {

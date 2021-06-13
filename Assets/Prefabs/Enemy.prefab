@@ -66,6 +66,8 @@ MonoBehaviour:
   _deathScoreAmount: 10
   _damageScoreAmount: 5
   _healthConfig: {fileID: 11400000, guid: 1b672f5b06877ae438ce674fbcea1d55, type: 2}
+  _hurtSFX: {fileID: 8300000, guid: de33575a78e9cd64b94a37b356b8d009, type: 3}
+  _deathSFX: {fileID: 8300000, guid: 9f4cefb52275a92419232598cb36d191, type: 3}
 --- !u!60 &6321123997529911719
 PolygonCollider2D:
   m_ObjectHideFlags: 0

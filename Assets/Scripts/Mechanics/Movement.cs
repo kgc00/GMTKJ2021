@@ -16,6 +16,7 @@ namespace Mechanics {
         [SerializeField, Range(1,500)] private float _maxSpeed = 15f;
         [SerializeField, Range(0f, 5f)] private float _dashDiminishRate = 0.05f;
         [SerializeField, Range(5f, 1000f)] private float _dashSpeed = 15f;
+        [SerializeField] private AudioClip _dashSFX;
         
         private Vector2 _pointerPos;
         private float _aDASHionableSpeed;
@@ -48,6 +49,7 @@ namespace Mechanics {
 
         private void HandleDash() {
             SwitchState(MovementState.Dashing);
+            MessageBroker.Default.Publish(new PlaySFXEvent(_dashSFX));
         }
         
 

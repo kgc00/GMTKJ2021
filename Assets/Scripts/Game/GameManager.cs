@@ -1,8 +1,10 @@
 using System.Globalization;
 using DG.Tweening;
 using Input;
+using Messages;
 using UnityEngine;
 using TMPro;
+using UniRx;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField, Range(0,10)] private int _incrementAmount;
     [SerializeField] private Color _scoreTextBaseColor;
     [SerializeField] private Color _scoreTextKillColor;
+    [SerializeField] private AudioClip _incrementSound;
     private Sequence _recurringIncrementSequence;
     private Sequence _incrementVisualsSequence;
     private Sequence _decreaseInstructionsOpacitySequence;
@@ -46,12 +49,12 @@ public class GameManager : MonoBehaviour {
             .SetLoops(-1).Play();
 
         _incrementVisualsSequence = DOTween.Sequence()
+            .AppendCallback(() => {MessageBroker.Default.Publish(new PlaySFXEvent(_incrementSound));})
             .Append(_scoreText.materialForRendering.DOColor(_scoreTextKillColor, "_FaceColor", .1f))
             .Append(_scoreText.transform.DOPunchScale(Vector3.one, .2f))
             .Join(_scoreText.materialForRendering.DOColor(_scoreTextBaseColor, "_FaceColor", .2f))
-            .SetAutoKill(false);
-
-        // DOTween.ToAlpha(() => _instructionText.color, x => _instructionText.color = x, 0, 5).SetDelay(15);
+            .SetAutoKill(false)
+            .Pause();
     }
 
     // Update is called once per frame
