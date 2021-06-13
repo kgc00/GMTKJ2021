@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: EnemyHealthConfig
   m_EditorClassIdentifier: 
   Config:
-    maxHp: 30
+    maxHp: 2
     invulnerable: 0
