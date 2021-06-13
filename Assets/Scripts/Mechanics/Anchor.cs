@@ -7,16 +7,23 @@ namespace Mechanics {
     public class Anchor : MonoBehaviour {
         [field: SerializeField] public Vector3 _throwTarget { get; private set; }
         [field: SerializeField] public Vector3 _deflectTarget { get; private set; }
+
         [SerializeField] private Rigidbody2D _rigidbody;
-        [SerializeField] private float _speed;
+        
         private AnchorState _state = AnchorState.Idle;
+        
         private Transform _reelTransform;
 
-        [Header("Common")] [SerializeField, Range(0, 3)]
-        private float _accelFactor = 1;
-
-        [SerializeField, Range(1, 3)] private float _maxAccelFactor = 2;
+        [Header("Common")] 
+        
+        [SerializeField, Range(0, 10)] private float _accelFactor = 1;
+        [SerializeField, Range(1, 10)] private float _maxAccelFactor = 2;
+        [SerializeField,Range(10,50f)]private float _maxSpeed;
+        [SerializeField, Range(0.1f, .99f)] private float _destinationDampFactor;
+        [SerializeField, Range(5f, 50f)] private float _speed;
         [SerializeField, Range(1, 10)] private float _damage;
+        [SerializeField, Range(0.01f, 2f)] private double _acceptanceThreshold = 0.1;
+        [SerializeField, Range(0,2f)]private float _deflectSpeed;
         [SerializeField] private bool deflectWithRelativeVelocity;
 
         [SerializeField, Range(0, 10), Header("Used when deflectWithRelativeVelocity is true")]
@@ -26,7 +33,8 @@ namespace Mechanics {
         private float _relativeDeflectForce = 7;
 
         private float _baseAccelFactor;
-        Vector3 deflectTarget = Vector3.zero;
+        private Vector2 _previousVelocity;
+        private Vector2 _lastPos;
 
         enum AnchorState {
             Idle,
@@ -41,45 +49,60 @@ namespace Mechanics {
             _baseAccelFactor = _accelFactor;
         }
 
-        private void Update() {
+        private void OnGUI()
+        {
+            GUILayout.Box(_state.ToString());
+            GUILayout.Box(_deflectTarget.ToString());
+            GUILayout.Box(transform.position.ToString());
+            GUILayout.Box(Vector3.Distance(transform.position, _deflectTarget).ToString());
+        }
 
+        private void Update() {
             if (_state == AnchorState.Thrown) {
-                if (Vector3.Distance(transform.position, _throwTarget) > 0.1) return;
+                if (Vector3.Distance(transform.position, _throwTarget) > _acceptanceThreshold) return;
                 _state = AnchorState.Landed;
             }
 
             if (_state == AnchorState.Reeling) {
                 if (_reelTransform == null) return;
 
-                if (Vector3.Distance(transform.position, _reelTransform.position) > 0.1) return;
+                if (Vector3.Distance(transform.position, _reelTransform.position) > _acceptanceThreshold/2f) return;
                 _state = AnchorState.Caught;
             }
 
             if (_state == AnchorState.Caught) { }
 
             if (_state == AnchorState.Deflected) {
-                if (Vector3.Distance(transform.position, _deflectTarget) > 0.1) return;
+                if (Vector3.Distance(transform.position, _deflectTarget) > _acceptanceThreshold * 2) return;
+                _accelFactor = _baseAccelFactor;
                 _state = AnchorState.Landed;
             }
         }
 
         private void FixedUpdate() {
             if (_state == AnchorState.Thrown) {
-                var destination = _throwTarget - transform.position;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed);
+                var destination = (_throwTarget - transform.position).normalized;
+                _rigidbody.velocity += (Vector2)destination * _speed;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Reeling) {
                 if (_reelTransform == null) return;
                 
                 _accelFactor = Mathf.Min(_accelFactor + Time.fixedDeltaTime, _maxAccelFactor);
-                var destination = _reelTransform.position - transform.position;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed * _accelFactor);
+                var destination = (_reelTransform.position - transform.position).normalized;
+                _rigidbody.velocity += (Vector2)destination * _speed * _accelFactor * Time.fixedDeltaTime;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Deflected) {
-                var destination = deflectTarget - transform.position;
-                _rigidbody.MovePosition(transform.position + destination * Time.fixedDeltaTime * _speed);
+                var destination = (_deflectTarget - transform.position).normalized;
+                _rigidbody.velocity += (Vector2)destination * _speed * _deflectSpeed;
+                _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
+            }
+
+            if (_state == AnchorState.Landed) {
+                _rigidbody.velocity *= _destinationDampFactor;
             }
         }
 
@@ -94,15 +117,23 @@ namespace Mechanics {
         }
 
         public void Deflect(Collision2D collision2D) {
+            if(_state == AnchorState.Thrown) return;
             _state = AnchorState.Deflected;
             var baseDeflectPos = (collision2D.contacts[0].normal * _deflectForce).ToVector3();
             var relativeForceDeflectPos = collision2D.relativeVelocity.magnitude *
                                           (collision2D.contacts[0].normal * _relativeDeflectForce).ToVector3();
             var deflectPos = deflectWithRelativeVelocity ? relativeForceDeflectPos : baseDeflectPos;
-            deflectTarget = collision2D.gameObject.transform.position + deflectPos;
+            _deflectTarget = (Vector2)(collision2D.gameObject.transform.position + deflectPos);
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {
+            HandleEnemyCollision(collision);
+
+            HandlePlayerCollision(collision);
+        }
+
+        private void OnCollisionStay2D(Collision2D collision)
+        {
             HandleEnemyCollision(collision);
 
             HandlePlayerCollision(collision);
@@ -127,9 +158,9 @@ namespace Mechanics {
             }
         }
 
-        // private void OnDrawGizmos() {
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawSphere(deflectTarget, 1);
-        // }
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_deflectTarget, (float)_acceptanceThreshold*2f);
+        }
     }
 }
