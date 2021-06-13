@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 
     private void OnDisable() {
         _recurringIncrementSequence?.Kill();
+        _incrementVisualsSequence?.Kill();
     }
 
     // Start is called before the first frame update
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour {
             .Join(_scoreText.materialForRendering.DOColor(_scoreTextBaseColor, "_FaceColor", .2f))
             .SetAutoKill(false);
 
-        DOTween.ToAlpha(() => _instructionText.color, x => _instructionText.color = x, 0, 5).SetDelay(15);
+        // DOTween.ToAlpha(() => _instructionText.color, x => _instructionText.color = x, 0, 5).SetDelay(15);
     }
 
     // Update is called once per frame
