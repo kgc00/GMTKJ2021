@@ -38,11 +38,6 @@ namespace Mechanics {
             _trailRenderer = GetComponentInChildren<TrailRenderer>();
         }
 
-        private void OnGUI()
-        {
-            GUILayout.Box(_rigidbody.velocity.magnitude.ToString());
-        }
-
         private void HandlePoint(Vector2 inputPointPos) {
             _pointerPos = inputPointPos;
         }
