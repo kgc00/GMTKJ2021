@@ -220,10 +220,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8717390381700487715}
   - component: {fileID: 8717390381700487714}
+  - component: {fileID: 6371848088014765638}
   - component: {fileID: 2687264676369308234}
   - component: {fileID: 8717390381700487713}
   - component: {fileID: 8717390381700487712}
-  - component: {fileID: 6371848088014765638}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -266,6 +266,21 @@ MonoBehaviour:
   _dashDiminishRate: 5
   _dashSpeed: 1000
   _dashSFX: {fileID: 8300000, guid: 52e565441324dcc40b3c2f3a2f696313, type: 3}
+--- !u!114 &6371848088014765638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717390381700487740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2188f0f5ed40fa90aaaa4fc9c7cae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthConfig: {fileID: 11400000, guid: 42694786487282544a85109f66dcb86d, type: 2}
+  _hurtSFX: {fileID: 8300000, guid: c1156be1b5a2a1d439decd0abde82f39, type: 3}
+  _deathSFX: {fileID: 8300000, guid: da91bb244d51dcb4eaef4008024cd27a, type: 3}
 --- !u!114 &2687264676369308234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,18 +347,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6371848088014765638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8717390381700487740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b2188f0f5ed40fa90aaaa4fc9c7cae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _healthConfig: {fileID: 11400000, guid: 42694786487282544a85109f66dcb86d, type: 2}
-  _hurtSFX: {fileID: 8300000, guid: c1156be1b5a2a1d439decd0abde82f39, type: 3}
-  _deathSFX: {fileID: 8300000, guid: da91bb244d51dcb4eaef4008024cd27a, type: 3}
