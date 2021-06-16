@@ -19,9 +19,6 @@ namespace Mechanics {
         [Header("General")]
         [SerializeField, Range(1, 10)] private int _damage;
         [SerializeField, Range(0.5f, 5f)] private float _knockbackDuration;
-        [SerializeField] private GameObject _deflectVFX;
-        // [SerializeField] private GameObject _throwVFX;
-        // [SerializeField] private GameObject _catchVFX;
 
         [Header("Physics")]
         [SerializeField, Range(0, 10)]
@@ -127,8 +124,6 @@ namespace Mechanics {
             var otherPos = collision2D.gameObject.transform.position;
             _deflectTarget = (Vector2)(otherPos + deflectPos);
             
-            var toCollision = (collision2D.otherCollider.ClosestPoint(transform.position) - (Vector2)otherPos);
-            MessageBroker.Default.Publish(new VFXEvent(_deflectVFX, (Vector2)otherPos + (toCollision / 2) ));
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {

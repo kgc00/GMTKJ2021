@@ -7,8 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UnlitPremulMat
-  m_Shader: {fileID: -6465566751694194690, guid: f135c3cca8ec34106b4ea7264d8961ef, type: 3}
+  m_Name: CutoutParticleMat
+  m_Shader: {fileID: -6465566751694194690, guid: 7ddd0bff07b0968418bb9e141ab5e989,
+    type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_73e2c8d86076466fa9f81f6ad5472481:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 2800000, guid: 62a849b2b2194074bbb65e63c0c77054, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -36,7 +37,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_2f0cec2c89004509924b10152d406e22: 0.3
+    - Vector1_2f0cec2c89004509924b10152d406e22: 0.319
     m_Colors:
-    - Color_7a59bac0149247ee93ca37f2b22a73b4: {r: 95.87451, g: 95.87451, b: 95.87451, a: 1}
+    - Color_7a59bac0149247ee93ca37f2b22a73b4: {r: 7.9066987, g: 7.9066987, b: 7.9066987,
+        a: 1}
   m_BuildTextureStacks: []

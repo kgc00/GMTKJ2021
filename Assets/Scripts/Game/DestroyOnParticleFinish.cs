@@ -7,7 +7,7 @@ public class DestroyOnParticleFinish : MonoBehaviour {
     public void Awake(){
         _particleSystem = GetComponent<ParticleSystem>();
     }
-    public void Update(){
+    public void LateUpdate(){
         if(_particleSystem.isPlaying) return;
 
         Destroy(gameObject);

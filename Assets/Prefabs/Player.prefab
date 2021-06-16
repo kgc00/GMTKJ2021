@@ -300,6 +300,9 @@ MonoBehaviour:
   _reelSFX: {fileID: 8300000, guid: cb3f9f4f81a92304ea03be667f12bdc1, type: 3}
   _catchSFX: {fileID: 8300000, guid: bfc79dc65e8bdd845812c96d3f9105fa, type: 3}
   _deflectSFX: {fileID: 8300000, guid: 7144c25dac6335647b3e71d4bc644e08, type: 3}
+  _deflectVFX: {fileID: 7652859801049605515, guid: fb96375d3b17a48fa836221e6285b0d7, type: 3}
+  _catchVFX: {fileID: 7652859801049605515, guid: 229ec96464a6c4e088ef04f619eb2d79, type: 3}
+  _throwVFX: {fileID: 7652859801049605515, guid: a2aab39ffbc004e3f871905692f78b3d, type: 3}
 --- !u!50 &8717390381700487713
 Rigidbody2D:
   serializedVersion: 4
