@@ -6,13 +6,15 @@ namespace Mechanics {
         public readonly float Force = 2f;
         public readonly float Duration = 2f;
         public readonly int Damage = 0;
+        public readonly GameObject KnockbackVFX;
 
         public KnockbackData(Vector2 direction, float force, float duration,
-            int damage) {
+            int damage, GameObject knockbackVFX) {
             Direction = direction;
             Force = force;
             Duration = duration;
             Damage = damage;
+            KnockbackVFX = knockbackVFX;
         }
     }
 }

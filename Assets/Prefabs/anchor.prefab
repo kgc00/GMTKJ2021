@@ -129,10 +129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61d3c3e92244d74a5ba718935feb55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 5471878067004091211}
   _damage: 1
   _knockbackDuration: 1
-  _deflectVFX: {fileID: 7652859801049605515, guid: fb96375d3b17a48fa836221e6285b0d7, type: 3}
+  _hitVFX: {fileID: 7652859801049605515, guid: acc38b6afd07341f1b8f82ba0721e8b6, type: 3}
+  _knockbackVFX: {fileID: 7652859801049605515, guid: acc38b6afd07341f1b8f82ba0721e8b6, type: 3}
+  _rigidbody: {fileID: 5471878067004091211}
   _accelFactor: 9
   _maxAccelFactor: 6
   _maxSpeed: 20

@@ -1,11 +1,14 @@
 ﻿using DG.Tweening;
 using Mechanics.Health;
+using Messages;
+using UniRx;
 using UnityEngine;
 
 namespace Mechanics {
     public partial class KnockbackDebuff : MonoBehaviour {
         private float _maxForce = 0.5f;
         private int Damage;
+        public GameObject KnockbackVFX { get; private set; }
         public Vector2 Direction { get; private set; }
         public float Duration { get; private set; }
         public float Force { get; private set; }
@@ -19,6 +22,7 @@ namespace Mechanics {
             Duration = data.Duration;
             Force = data.Force;
             Damage = data.Damage;
+            KnockbackVFX = data.KnockbackVFX;
             if (TryGetComponent(out EnemyAI _ai)) {
                 _ai.enabled = false;
             }
@@ -34,15 +38,20 @@ namespace Mechanics {
 
         private void OnCollisionEnter2D(Collision2D other) {
             if (other.gameObject.CompareTag("Enemy")) {
-                
+
                 if (other.gameObject.TryGetComponent(out IDamagable damagable)) {
                     if (damagable as Object == null) return;
 
                     damagable.HealthSystem.Damage(Damage, this);
                 }
-                
+
                 other.gameObject.AddComponent<KnockbackDebuff>()
-                    .Initialize(new KnockbackData(other.contacts[0].normal, Force /2,Duration*0.7f, Damage));
+                    .Initialize(new KnockbackData(other.contacts[0].normal, Force / 2, Duration * 0.7f, Damage, KnockbackVFX));
+
+                var lookTarget = other.transform.position - transform.position;
+                float angle = Mathf.Atan2(lookTarget.y, lookTarget.x) * Mathf.Rad2Deg;
+                var spawnRot = Quaternion.AngleAxis(angle, Vector3.forward);
+                MessageBroker.Default.Publish(new VFXEvent(KnockbackVFX, other.collider.ClosestPoint(transform.position), spawnRot));
             }
         }
 

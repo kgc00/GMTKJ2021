@@ -10,7 +10,6 @@ namespace Mechanics {
         public Vector3 _throwTarget { get; private set; }
         public Vector3 _deflectTarget { get; private set; }
 
-        [SerializeField] private Rigidbody2D _rigidbody;
 
         private AnchorState _state = AnchorState.Idle;
 
@@ -19,6 +18,10 @@ namespace Mechanics {
         [Header("General")]
         [SerializeField, Range(1, 10)] private int _damage;
         [SerializeField, Range(0.5f, 5f)] private float _knockbackDuration;
+        [SerializeField] private GameObject _hitVFX;
+        [SerializeField] private GameObject _knockbackVFX;
+        [SerializeField] private Rigidbody2D _rigidbody;
+
 
         [Header("Physics")]
         [SerializeField, Range(0, 10)]
@@ -123,7 +126,7 @@ namespace Mechanics {
             var deflectPos = deflectWithRelativeVelocity ? relativeForceDeflectPos : baseDeflectPos;
             var otherPos = collision2D.gameObject.transform.position;
             _deflectTarget = (Vector2)(otherPos + deflectPos);
-            
+
         }
 
         private void OnCollisionEnter2D(Collision2D collision) {
@@ -152,10 +155,14 @@ namespace Mechanics {
                 if (damagable as Object == null) return;
 
                 damagable.HealthSystem.Damage(_damage, this);
+                var lookTarget = collision.transform.position - transform.position;
+                float angle = Mathf.Atan2(lookTarget.y, lookTarget.x) * Mathf.Rad2Deg;
+                var spawnRot = Quaternion.AngleAxis(angle, Vector3.forward);
+                MessageBroker.Default.Publish(new VFXEvent(_hitVFX, collision.otherCollider.ClosestPoint(transform.position), spawnRot));
             }
 
             collision.gameObject.AddComponent<KnockbackDebuff>().Initialize(new KnockbackData(collision.contacts[0].normal,
-                collision.relativeVelocity.sqrMagnitude, _knockbackDuration, _damage));
+                collision.relativeVelocity.sqrMagnitude, _knockbackDuration, _damage, _knockbackVFX));
         }
 
         private void OnDrawGizmos() {
