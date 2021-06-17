@@ -71,10 +71,25 @@ namespace Mechanics {
             var spawnRot = Quaternion.AngleAxis(angle, Vector3.forward);
             _anchorObj = Instantiate(_anchorPrefab, spawnPos, spawnRot).GetComponent<Anchor>();
             _anchorObj.Throw(throwPos);
+            _distanceJoint.connectedBody = _anchorObj.GetComponent<Rigidbody2D>();
+            _distanceJoint.distance = _distanceTheshold;
             _catching = false;
             _inputReader.EnableReeling();
             MessageBroker.Default.Publish(new PlaySFXEvent(_throwSFX));
             MessageBroker.Default.Publish(new VFXEvent(_throwVFX, spawnPos, spawnRot));
         }
+
+        [SerializeField] DistanceJoint2D _distanceJoint;
+        [SerializeField, Range(1, 20)] float _distanceTheshold;
+        // public void FixedUpdate() {
+        //     if (_anchorObj == null) return;
+
+        //     var distance = Vector3.Distance(_anchorObj.transform.position, transform.position);
+        //     if (distance <= _distanceThreshold) return;
+
+        //     var heading = _anchorObj.transform.position - transform.position;
+        //     heading.z = 0;
+        //     gameObject.transform.position = heading.normalized * _distanceThreshold;
+        // }
     }
 }

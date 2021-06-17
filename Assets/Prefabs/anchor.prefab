@@ -144,6 +144,8 @@ MonoBehaviour:
   deflectWithRelativeVelocity: 1
   _deflectForce: 7
   _relativeDeflectForce: 0.4
+  _distanceJoint: {fileID: 0}
+  _turtleDistanceTheshold: 8
 --- !u!61 &1639411136062692159
 BoxCollider2D:
   m_ObjectHideFlags: 0

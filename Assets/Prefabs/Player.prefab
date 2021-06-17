@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 2687264676369308234}
   - component: {fileID: 8717390381700487713}
   - component: {fileID: 8717390381700487712}
+  - component: {fileID: 8972143896092245612}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -303,6 +304,8 @@ MonoBehaviour:
   _deflectVFX: {fileID: 7652859801049605515, guid: fb96375d3b17a48fa836221e6285b0d7, type: 3}
   _catchVFX: {fileID: 7652859801049605515, guid: 229ec96464a6c4e088ef04f619eb2d79, type: 3}
   _throwVFX: {fileID: 7652859801049605515, guid: a2aab39ffbc004e3f871905692f78b3d, type: 3}
+  _distanceJoint: {fileID: 8972143896092245612}
+  _distanceTheshold: 6
 --- !u!50 &8717390381700487713
 Rigidbody2D:
   serializedVersion: 4
@@ -350,3 +353,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!232 &8972143896092245612
+DistanceJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717390381700487740}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 0.005
+  m_MaxDistanceOnly: 1
