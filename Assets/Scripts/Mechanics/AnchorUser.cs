@@ -10,13 +10,13 @@ namespace Mechanics {
         [SerializeField] private Movement _movement;
         [SerializeField] private GameObject _anchorPrefab;
         [SerializeField] private InputReader _inputReader;
-        
+
         [Header("SFX")]
         [SerializeField] private AudioClip _throwSFX;
         [SerializeField] private AudioClip _reelSFX;
         [SerializeField] private AudioClip _catchSFX;
         [SerializeField] private AudioClip _deflectSFX;
-        
+
         [Header("VFX")]
         [SerializeField] private GameObject _deflectVFX;
         [SerializeField] private GameObject _catchVFX;
@@ -55,12 +55,11 @@ namespace Mechanics {
                 Destroy(anchor.gameObject);
                 _inputReader.EnableDeploying();
                 MessageBroker.Default.Publish(new PlaySFXEvent(_catchSFX));
-                MessageBroker.Default.Publish(new VFXEvent(_catchVFX, (Vector2) pos));
-            }
-            else {
+                MessageBroker.Default.Publish(new VFXEvent(_catchVFX, transform));
+            } else {
                 anchor.Deflect(collision2D);
                 MessageBroker.Default.Publish(new PlaySFXEvent(_deflectSFX));
-                MessageBroker.Default.Publish(new VFXEvent(_deflectVFX, (Vector2) pos + (offset)));
+                MessageBroker.Default.Publish(new VFXEvent(_deflectVFX, (Vector2)pos + (offset)));
             }
         }
 
