@@ -146,6 +146,8 @@ namespace Mechanics {
                 _accelFactor = _baseAccelFactor;
                 anchorUser.Catch(this, collision);
             }
+
+            transform.rotation = GetLookAtQuaternion(collision.transform.position, 180);
         }
 
         private void HandleEnemyCollision(Collision2D collision) {
@@ -155,14 +157,19 @@ namespace Mechanics {
                 if (damagable as Object == null) return;
 
                 damagable.HealthSystem.Damage(_damage, this);
-                var lookTarget = collision.transform.position - transform.position;
-                float angle = Mathf.Atan2(lookTarget.y, lookTarget.x) * Mathf.Rad2Deg;
-                var spawnRot = Quaternion.AngleAxis(angle, Vector3.forward);
+                Quaternion spawnRot = GetLookAtQuaternion(collision.transform.position);
                 MessageBroker.Default.Publish(new VFXEvent(_hitVFX, collision.otherCollider.ClosestPoint(transform.position), spawnRot));
             }
 
             collision.gameObject.AddComponent<KnockbackDebuff>().Initialize(new KnockbackData(collision.contacts[0].normal,
                 collision.relativeVelocity.sqrMagnitude, _knockbackDuration, _damage, _knockbackVFX));
+        }
+
+        private Quaternion GetLookAtQuaternion(Vector3 targetPos, float angleOffset = 0f) {
+            var lookTarget = targetPos - transform.position;
+            float angle = Mathf.Atan2(lookTarget.y, lookTarget.x) * Mathf.Rad2Deg;
+            var spawnRot = Quaternion.AngleAxis(angle + angleOffset, Vector3.forward);
+            return spawnRot;
         }
 
         private void OnDrawGizmos() {

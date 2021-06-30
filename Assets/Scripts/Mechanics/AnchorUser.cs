@@ -10,6 +10,9 @@ namespace Mechanics {
         [SerializeField] private Movement _movement;
         [SerializeField] private GameObject _anchorPrefab;
         [SerializeField] private InputReader _inputReader;
+        [SerializeField] private LineRenderer _lineRenderer;
+        [SerializeField] DistanceJoint2D _distanceJoint;
+        [SerializeField, Range(1, 20)] float _distanceTheshold;
 
         [Header("SFX")]
         [SerializeField] private AudioClip _throwSFX;
@@ -31,6 +34,7 @@ namespace Mechanics {
             MessageBroker.Default.Receive<ReelAction>().Subscribe(_ => HandleReel()).AddTo(this);
             MessageBroker.Default.Receive<ReelCanceledAction>().Subscribe(_ => HandleReelCanceled()).AddTo(this);
             MessageBroker.Default.Receive<PointAction>().Subscribe(input => HandlePoint(input.PointPos)).AddTo(this);
+            _lineRenderer.enabled = false;
         }
 
         private void HandlePoint(Vector2 inputPointPos) {
@@ -52,6 +56,7 @@ namespace Mechanics {
             var offset = (collision2D.otherCollider.ClosestPoint(anchor.transform.position) - (Vector2)pos) / 2;
 
             if (_catching) {
+                _lineRenderer.enabled = false;
                 Destroy(anchor.gameObject);
                 _inputReader.EnableDeploying();
                 MessageBroker.Default.Publish(new PlaySFXEvent(_catchSFX));
@@ -77,19 +82,14 @@ namespace Mechanics {
             _inputReader.EnableReeling();
             MessageBroker.Default.Publish(new PlaySFXEvent(_throwSFX));
             MessageBroker.Default.Publish(new VFXEvent(_throwVFX, spawnPos, spawnRot));
+            _lineRenderer.enabled = true;
         }
 
-        [SerializeField] DistanceJoint2D _distanceJoint;
-        [SerializeField, Range(1, 20)] float _distanceTheshold;
-        // public void FixedUpdate() {
-        //     if (_anchorObj == null) return;
+        private void Update() {
+            if (_anchorObj == null || !_lineRenderer.enabled) return;
 
-        //     var distance = Vector3.Distance(_anchorObj.transform.position, transform.position);
-        //     if (distance <= _distanceThreshold) return;
-
-        //     var heading = _anchorObj.transform.position - transform.position;
-        //     heading.z = 0;
-        //     gameObject.transform.position = heading.normalized * _distanceThreshold;
-        // }
+            Vector3[] vs = new[] { transform?.position ?? Vector3.zero, _anchorObj?.transform.position ?? Vector3.zero };
+            _lineRenderer.SetPositions(vs);
+        }
     }
 }
