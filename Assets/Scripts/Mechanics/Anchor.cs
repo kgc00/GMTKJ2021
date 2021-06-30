@@ -92,13 +92,13 @@ namespace Mechanics {
 
                 _accelFactor = Mathf.Min(_accelFactor + Time.fixedDeltaTime, _maxAccelFactor);
                 var destination = (_reelTransform.position - transform.position).normalized;
-                _rigidbody.velocity += (Vector2)destination * _speed * _accelFactor * Time.fixedDeltaTime;
+                _rigidbody.velocity += (Vector2)destination * (_speed * _accelFactor * Time.fixedDeltaTime);
                 _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 
             if (_state == AnchorState.Deflected) {
                 var destination = (_deflectTarget - transform.position).normalized;
-                _rigidbody.velocity += (Vector2)destination * _speed * _deflectSpeed;
+                _rigidbody.velocity += (Vector2)destination * (_speed * _deflectSpeed);
                 _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
             }
 

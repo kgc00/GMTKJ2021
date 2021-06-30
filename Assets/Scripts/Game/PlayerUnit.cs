@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Game {
     public class PlayerUnit : MonoBehaviour, IDamagable {
+        [SerializeField] private VFXService SORef; 
         [SerializeField] private HealthConfigSO _healthConfig;
         public HealthSystem HealthSystem { get; private set; }
         public GameObject Behaviour => gameObject;

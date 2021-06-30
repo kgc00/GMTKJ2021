@@ -5,9 +5,7 @@ using UnityEngine;
 using Utils;
 
 namespace Mechanics {
-    [RequireComponent(typeof(Movement))]
     public class AnchorUser : MonoBehaviour {
-        [SerializeField] private Movement _movement;
         [SerializeField] private GameObject _anchorPrefab;
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private LineRenderer _lineRenderer;
@@ -86,9 +84,9 @@ namespace Mechanics {
         }
 
         private void Update() {
-            if (_anchorObj == null || !_lineRenderer.enabled) return;
+            if (_anchorObj == null || !_lineRenderer.enabled || transform == null) return;
 
-            Vector3[] vs = new[] { transform?.position ?? Vector3.zero, _anchorObj?.transform.position ?? Vector3.zero };
+            Vector3[] vs = { transform.position, _anchorObj.transform.position };
             _lineRenderer.SetPositions(vs);
         }
     }
